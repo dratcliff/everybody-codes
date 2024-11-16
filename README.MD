@@ -1,1 +1,1 @@
-[https://everybody.codes](Everybody Codes)
+[Everybody Codes](https://everybody.codes)
