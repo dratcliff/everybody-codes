@@ -46,7 +46,7 @@ priests = 980692
 acolytes = 10
 # acolytes = 5
 blocks = 202400000000
-blocks = 202400000
+blocks = 202400000000
 # blocks = 50
 layer = 1
 thickness = 1
@@ -54,15 +54,14 @@ t = []
 t.append(thickness)
 
 
-def can_be_removed(x):
-    width = 2*len(x)-1
+def can_be_removed(x, layer):
+    width = 2*layer-1
     T = 0
-    L = len(x)-1
+    L = layer-1
     for i in range(L):
-        T += ((priests % acolytes) * (width % acolytes) * x[i]) % acolytes
-        if i != 0:
-            T += ((priests % acolytes) * (width % acolytes) * x[i]) % acolytes
-    return T
+        T += 2*(((priests % acolytes) * (width % acolytes) * x[i]) % acolytes)
+
+    return T - ((priests % acolytes) * (width % acolytes) * x[0]) % acolytes
 
 
 while True:
@@ -70,11 +69,12 @@ while True:
     thickness = ((thickness % acolytes * priests %
                  acolytes) % acolytes) + acolytes
     t.append(0)
+    s = 0
     for i in range(layer):
         t[i] += thickness
-
-    total = t[0] + 2*sum(t[1:])
-    removed = can_be_removed(t)
+        s += 2*t[i]
+    total = s - t[0]
+    removed = can_be_removed(t, layer)
     if total-removed > blocks:
         print(total-removed-blocks)
         break
